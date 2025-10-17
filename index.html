@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ediify Nexus - Your Personal Study Automation Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background-color: #0f1419;
+            color: #ffffff;
+            line-height: 1.6;
+            background-image: 
+                linear-gradient(rgba(0, 217, 255, 0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 217, 255, 0.15) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center center;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 20, 25, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #00d9ff;
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+            z-index: 1000;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+            }
+            to {
+                box-shadow: 0 0 30px rgba(0, 217, 255, 0.5);
+            }
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: #00d9ff;
+            text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .nav-toggle span {
+            width: 25px;
+            height: 3px;
+            background-color: #00d9ff;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px rgba(0, 217, 255, 0.5);
+        }
+
+        .nav-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .nav-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .nav-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #00d9ff;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 5px rgba(0, 217, 255, 0.5);
+        }
+
+        .nav-link:hover {
+            color: #00d9ff;
+            text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .nav-toggle {
+                display: flex;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 60px;
+                right: -100%;
+                width: 70%;
+                max-width: 300px;
+                background: rgba(15, 20, 25, 0.98);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                padding: 30px 20px;
+                gap: 20px;
+                align-items: flex-start;
+                transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                border-left: 2px solid #00d9ff;
+                box-shadow: -5px 0 20px rgba(0, 217, 255, 0.3);
+                height: calc(100vh - 60px);
+            }
+
+            .nav-menu.active {
+                right: 0;
+            }
+
+            .nav-link {
+                font-size: 16px;
+                width: 100%;
+                padding: 10px 0;
+            }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 80px 20px 20px;
+        }
+
+        .logo-section {
+            text-align: center;
+            padding: 40px 0 20px;
+        }
+
+        .logo-img {
+            width: 320px;
+            height: 240px;
+            margin: 0 auto 30px;
+            display: block;
+            object-fit: contain;
+        }
+
+        .brand-name {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 42px;
+            font-weight: 700;
+            color: #00d9ff;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        .hero-description {
+            font-size: 18px;
+            color: #a0a0a0;
+            margin-bottom: 15px;
+        }
+
+        .hero-tagline {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .hero-detail {
+            font-size: 16px;
+            color: #a0a0a0;
+            margin-bottom: 40px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: #00d9ff;
+            color: #0f1419;
+            padding: 16px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            position: relative;
+            transition: all 0.3s ease;
+            animation: buttonGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes buttonGlow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(0, 217, 255, 0.5),
+                            0 0 40px rgba(0, 217, 255, 0.3),
+                            0 0 60px rgba(0, 217, 255, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(0, 217, 255, 0.7),
+                            0 0 60px rgba(0, 217, 255, 0.5),
+                            0 0 90px rgba(0, 217, 255, 0.3);
+            }
+        }
+
+        .cta-button:hover {
+            background-color: #00c4e6;
+            transform: translateY(-2px);
+            box-shadow: 0 0 40px rgba(0, 217, 255, 0.8),
+                        0 0 80px rgba(0, 217, 255, 0.6),
+                        0 0 120px rgba(0, 217, 255, 0.4);
+        }
+
+        .price-text {
+            display: inline-block;
+        }
+
+        .strike-price {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .section-description {
+            font-size: 16px;
+            color: #a0a0a0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .content-box {
+            background-color: #1a2332;
+            border: 1px solid #2a3544;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .content-box p {
+            margin-bottom: 20px;
+            color: #d0d0d0;
+            font-size: 15px;
+        }
+
+        .content-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .warning-box {
+            background-color: #1a2332;
+            border: 1px solid #2a3544;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 40px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .warning-icon {
+            color: #00d9ff;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .warning-content h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .warning-content p {
+            color: #a0a0a0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .toolkit-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.accordion-item {
+    background-color: #1a2332;
+    border: 1px solid #2a3544;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.accordion-header {
+    padding: 30px 20px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.accordion-header:hover {
+    background-color: #212d3f;
+}
+
+.accordion-icon {
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 217, 255, 0.1);
+    border: 2px solid rgba(0, 217, 255, 0.3);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #00d9ff;
+    font-size: 24px;
+}
+
+.accordion-title {
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.accordion-arrow {
+    display: none;
+}
+
+.accordion-content {
+    display: none;
+}
+
+.accordion-content.active {
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 700px;
+    z-index: 2000;
+}
+
+.accordion-body {
+    background-color: #1a2332;
+    border: 2px solid #00d9ff;
+    border-radius: 12px;
+    padding: 40px 30px 30px 30px;
+    box-shadow: 0 0 40px rgba(0, 217, 255, 0.5);
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.accordion-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 35px;
+    color: #00d9ff;
+    cursor: pointer;
+    font-weight: bold;
+    line-height: 1;
+    transition: all 0.3s ease;
+}
+
+.accordion-close:hover {
+    color: #ffffff;
+    transform: scale(1.1);
+}
+
+.accordion-body p {
+    color: #d0d0d0;
+    font-size: 15px;
+    margin-bottom: 20px;
+    line-height: 1.7;
+}
+
+.accordion-body img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.accordion-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    z-index: 1999;
+}
+
+.accordion-backdrop.active {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .toolkit-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .accordion-content.active {
+        width: 95%;
+    }
+      }
+
+        .guide-section {
+            background-color: #1a2332;
+            border: 1px solid #2a3544;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .guide-section h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .guide-section p {
+            color: #d0d0d0;
+            font-size: 15px;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .guide-section ol {
+            color: #d0d0d0;
+            font-size: 15px;
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .guide-section li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .video-container {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+            border-radius: 12px;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .bonus-section {
+            margin-top: 60px;
+        }
+
+        .bonus-card {
+            background-color: #1a2332;
+            border: 1px solid #2a3544;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .bonus-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(0, 217, 255, 0.1);
+    border: 2px solid rgba(0, 217, 255, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: #00d9ff;
+}
+
+.bonus-icon svg {
+    width: 28px;
+    height: 28px;
+      }
+
+        .bonus-card h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .bonus-card p {
+            color: #a0a0a0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            color: #00d9ff;
+            font-weight: 600;
+        }
+
+        .faq-section {
+            padding: 60px 0;
+        }
+
+        .faq-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .faq-item {
+            background-color: #1a2332;
+            border: 1px solid #2a3544;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 20px 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background-color: #212d3f;
+        }
+
+        .faq-question-text {
+            font-size: 16px;
+            font-weight: 600;
+            flex-grow: 1;
+            line-height: 1.5;
+        }
+
+        .faq-arrow {
+            color: #a0a0a0;
+            font-size: 14px;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .faq-arrow.active {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-answer.active {
+            max-height: 500px;
+        }
+
+        .faq-answer p {
+            padding: 0 24px 20px 24px;
+            color: #a0a0a0;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+
+        .faq-answer p:last-child {
+            margin-bottom: 0;
+            padding-bottom: 20px;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        .cta-section h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            color: #a0a0a0;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid #2a3544;
+        }
+
+        .contact-info {
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #a0a0a0;
+        }
+
+        .contact-info a {
+            color: #00d9ff;
+            text-decoration: none;
+        }
+
+        .footer-credit {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .social-links {
+            margin-top: 30px;
+        }
+
+        .social-links h4 {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #1a2332;
+            border: 1px solid #2a3544;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background-color: #00d9ff;
+            color: #0f1419;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 32px;
+            }
+
+            .hero-subtitle {
+                font-size: 28px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">Ediify Nexus</div>
+            <div class="nav-toggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="#about" class="nav-link" onclick="closeMenu()">About Ediify Nexus</a>
+                <a href="#toolkit" class="nav-link" onclick="closeMenu()">Core Toolkit</a>
+                <a href="#walkthrough" class="nav-link" onclick="closeMenu()">Full Walkthrough</a>
+                <a href="#bonuses" class="nav-link" onclick="closeMenu()">Special Bonuses</a>
+                <a href="#faq" class="nav-link" onclick="closeMenu()">FAQ's</a>
+                <a href="#contact" class="nav-link" onclick="closeMenu()">Contact Us</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="logo-section">
+            <img src="https://i.postimg.cc/c4jBqTNw/Beauty-Plus-Cam-20250921184604550-save.png" alt="Ediify Nexus Logo" class="logo-img">
+
+        <div class="hero-section">
+            <h1 class="hero-title">Ediify Nexus</h1>
+            <h2 class="hero-subtitle">Your Personal Study Automation Hub</h2>
+            <p class="hero-description">Designed For Every Student — From School To University</p>
+            <p class="hero-tagline">Plan Smarter. Study Faster. Achieve More.</p>
+            <p class="hero-detail">Automated calculators, planners, and smart trackers to streamline your exam preparation.</p>
+            <a href="https://wa.me/919149118493?text=Hi%2C%20I%20would%20like%20to%20purchase%20Ediify%20Nexus" class="cta-button">
+                Get Ediify Nexus Now — Just <span class="price-text"><span class="strike-price">₹799</span> ₹499</span>
+            </a>
+        </div>
+
+        <div class="section" id="about">
+            <h2 class="section-title">Streamline Your Success</h2>
+            <p class="section-description">Turn hours of planning into seconds, so you can focus on what truly matters: learning.</p>
+            
+            <div class="content-box">
+                <p><strong>Ediify Nexus</strong>, powered by Ediify Concept, is your personal study automation hub — a suite of powerful, easy-to-use tools that help you plan, organise and track exam preparation efficiently.</p>
+                <p>Forget complicated spreadsheets. Ediify Nexus turns hours of planning into seconds with automated calculators, planners and smart trackers. Built for students who want clarity and results, the toolkit streamlines time allocation, revision scheduling and performance tracking so you can focus on learning.</p>
+            </div>
+
+            <div class="warning-box">
+                <div class="warning-icon">⚠</div>
+                <div class="warning-content">
+                    <h3>Important System Requirement</h3>
+                    <p>As of the current version, Ediify Nexus operates exclusively on Microsoft Excel. Students must download and install the latest version of Microsoft Excel on their device (PC, laptop, or smartphone) to ensure the product runs smoothly and without errors.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="toolkit">
+    <h2 class="section-title">Core Toolkit - Version 1.0</h2>
+    <p class="section-description">Everything you need to automate your study plan and track your progress efficiently.</p>
+    
+    <div class="accordion-backdrop" id="accordionBackdrop" onclick="closeAllAccordions()"></div>
+    
+    <div class="toolkit-grid">
+        <!-- 1. Revision Checklist -->
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(0)">
+                <div class="accordion-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 11 12 14 22 4"></polyline>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                    </svg>
+                </div>
+                <div class="accordion-title">Revision Checklist</div>
+            </div>
+            <div class="accordion-content" id="content-0">
+                <div class="accordion-body">
+                    <span class="accordion-close" onclick="closeAllAccordions(); event.stopPropagation();">&times;</span>
+                    <p>Automatically calculates syllabus completion percentage for each subject, showing your real-time progress and status (Pending/Completed).</p>
+                    <img src="https://i.postimg.cc/QxhWtQnp/Screenshot-2025-09-20-11-41-50-15.jpg" alt="Revision Checklist">
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Subject-Wise Time Allocator -->
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(1)">
+                <div class="accordion-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div class="accordion-title">Subject-Wise Time Allocator</div>
+            </div>
+            <div class="accordion-content" id="content-1">
+                <div class="accordion-body">
+                    <span class="accordion-close" onclick="closeAllAccordions(); event.stopPropagation();">&times;</span>
+                    <p>Calculates how many days to give to each remaining subject so your syllabus finishes at least 7 days before exams begin.</p>
+                    <img src="https://i.postimg.cc/G3kyd7zs/Screenshot-2025-09-20-11-03-46-31.jpg" alt="Subject-Wise Time Allocator">
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Weekly Subject Planner -->
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(2)">
+                <div class="accordion-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <div class="accordion-title">Weekly Subject Planner</div>
+            </div>
+            <div class="accordion-content" id="content-2">
+                <div class="accordion-body">
+                    <span class="accordion-close" onclick="closeAllAccordions(); event.stopPropagation();">&times;</span>
+                    <p>Balances total weekly study hours across all subjects according to your available time.</p>
+                    <img src="https://i.postimg.cc/QNpTh4ST/Screenshot-2025-09-20-11-30-09-21.jpg" alt="Weekly Subject Planner">
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Weekly Chapter Planner -->
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(3)">
+                <div class="accordion-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                </div>
+                <div class="accordion-title">Weekly Chapter Planner</div>
+            </div>
+            <div class="accordion-content" id="content-3">
+                <div class="accordion-body">
+                    <span class="accordion-close" onclick="closeAllAccordions(); event.stopPropagation();">&times;</span>
+                    <p>Distributes study hours fairly across chapters of a subject for balanced coverage.</p>
+                    <img src="https://i.postimg.cc/NG1HBJb9/Screenshot-2025-09-20-11-33-53-79.jpg" alt="Weekly Chapter Planner">
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Weekly Pomodoro Study Planner -->
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(4)">
+                <div class="accordion-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="12" x2="14" y2="14"></line>
+                    </svg>
+                </div>
+                <div class="accordion-title">Weekly Pomodoro Study Planner</div>
+            </div>
+            <div class="accordion-content" id="content-4">
+                <div class="accordion-body">
+                    <span class="accordion-close" onclick="closeAllAccordions(); event.stopPropagation();">&times;</span>
+                    <p>Uses the proven Pomodoro Technique (25 min study + 5 min break) to calculate focused study and rest sessions that fight burnout.</p>
+                    <img src="https://i.postimg.cc/bNp2JxFk/Screenshot-2025-09-20-11-37-28-12.jpg" alt="Weekly Pomodoro Study Planner">
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Revision Plan Scheduler -->
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(5)">
+                <div class="accordion-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                        <line x1="8" y1="14" x2="8" y2="14.01"></line>
+                        <line x1="12" y1="14" x2="12" y2="14.01"></line>
+                        <line x1="16" y1="14" x2="16" y2="14.01"></line>
+                    </svg>
+                </div>
+                <div class="accordion-title">Revision Plan Scheduler</div>
+            </div>
+            <div class="accordion-content" id="content-5">
+                <div class="accordion-body">
+                    <span class="accordion-close" onclick="closeAllAccordions(); event.stopPropagation();">&times;</span>
+                    <p>Suggests your next 5 revision dates using the 1-3-7-14-30 day spacing system — the science-backed formula for long-term memory.</p>
+                    <img src="https://i.postimg.cc/sDsZXY0Y/Screenshot-2025-09-20-11-28-12-15.jpg" alt="Revision Plan Scheduler">
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. Practice Paper Log -->
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(6)">
+                <div class="accordion-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                        <line x1="9" y1="12" x2="15" y2="12"></line>
+                        <line x1="9" y1="16" x2="15" y2="16"></line>
+                    </svg>
+                </div>
+                <div class="accordion-title">Practice Paper Log</div>
+            </div>
+            <div class="accordion-content" id="content-6">
+                <div class="accordion-body">
+                    <span class="accordion-close" onclick="closeAllAccordions(); event.stopPropagation();">&times;</span>
+                    <p>Tracks your test scores, averages, and pending practice papers to measure actual progress.</p>
+                    <img src="https://i.postimg.cc/ncpQz4wK/Screenshot-2025-09-20-12-11-30-87.jpg" alt="Practice Paper Log">
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. Chapter-Wise Time Allocator -->
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(7)">
+                <div class="accordion-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="20" x2="12" y2="10"></line>
+                        <line x1="18" y1="20" x2="18" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="16"></line>
+                    </svg>
+                </div>
+                <div class="accordion-title">Chapter-Wise Time Allocator</div>
+            </div>
+            <div class="accordion-content" id="content-7">
+                <div class="accordion-body">
+                    <span class="accordion-close" onclick="closeAllAccordions(); event.stopPropagation();">&times;</span>
+                    <p>Calculates average study days for each chapter so your syllabus ends at least one day before your exam.</p>
+                    <img src="https://i.postimg.cc/nVvDpRTm/Screenshot-2025-09-20-11-18-17-37.jpg" alt="Chapter-Wise Time Allocator">
+                </div>
+            </div>
+        </div>
+    </div>
+          </div>
+
+        <div class="section">
+            <div class="guide-section">
+                <h3>How to Make the Most of Ediify Nexus</h3>
+                <p>To get maximum benefit, follow this smart sequence:</p>
+                <ol>
+                    <li>Begin with the <strong>Revision Checklist</strong> — know your starting point.</li>
+                    <li>Use <strong>Subject & Chapter Allocators</strong> to build a timeline.</li>
+                    <li>Plan your <strong>Weekly Studies</strong> for balanced prep.</li>
+                    <li>Apply <strong>Pomodoro Planner</strong> to stay sharp and focused.</li>
+                  <li>Regularly update progress and set <strong>Revision Schedules</strong>.</li>
+                      <li>Wrap up with <strong>Practice Papers</strong> to strengthen exam readiness.</li>
+                </ol>
+                <p>This quick roadmap alone can transform your preparation flow.</p>
+                <p>The detailed step-by-step walkthrough with visuals, expert strategies, and pro tips is available exclusively in the User Guide included with every verified purchase.</p>
+            </div>
+        </div>
+
+        <div class="section" id="walkthrough">
+            <h2 class="section-title">Full Walkthrough & Live Demo</h2>
+            <p class="section-description">Watch this detailed walkthrough to explore every feature of Ediify Nexus and learn how to use all tools effectively to simplify your study planning in minutes.</p>
+            
+            <div class="video-container">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/hxGSSlSrUwc?si=jn13MvbaSqIEb9lD" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <div class="bonus-section" id="bonuses">
+    <h2 class="section-title">Special Bonuses</h2>
+    
+    <div class="bonus-card">
+        <div class="bonus-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                <path d="M12 6v6"></path>
+                <path d="M9 9h6"></path>
+            </svg>
+        </div>
+        <h3>Bonus 1: Detailed User Guide</h3>
+        <p>Every purchase of Ediify Nexus comes with a comprehensive User Guide. This guide explains the purpose of each tool, step-by-step instructions, and tips to help you make the most out of Ediify Nexus for smarter, faster, and more efficient exam preparation.</p>
+    </div>
+
+    <div class="bonus-card">
+        <div class="bonus-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 12 20 22 4 22 4 12"></polyline>
+                <rect x="2" y="7" width="20" height="5"></rect>
+                <line x1="12" y1="22" x2="12" y2="7"></line>
+                <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+            </svg>
+        </div>
+        <h3>Bonus 2: Free Updates & Private Community Access</h3>
+        <p>All buyers receive free updates and access to a private Telegram channel for improvements and announcements until <span class="highlight">March 31, 2026</span>.</p>
+    </div>
+          </div>
+
+        <div class="section faq-section" id="faq">
+            <h2 class="section-title">Frequently Asked Questions (FAQ)</h2>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(0)">
+                        <span class="faq-question-text">What exactly is Ediify Nexus?</span>
+                        <span class="faq-arrow" id="faq-arrow-0">+</span>
+                    </div>
+                    <div class="faq-answer" id="faq-answer-0">
+                        <p>Ediify Nexus, powered by Ediify Concept, is a study automation hub with ready-to-use planners, trackers, and calculators. It's designed to replace complicated spreadsheets and manual planning by helping you manage time, schedule revisions, and track progress in just a few clicks.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(1)">
+                        <span class="faq-question-text">Who can use Ediify Nexus?</span>
+                        <span class="faq-arrow" id="faq-arrow-1">+</span>
+                    </div>
+                    <div class="faq-answer" id="faq-answer-1">
+                        <p>Any student. Whether you're in Class 10, Class 12, or pursuing higher studies at college/university, Ediify Nexus is built to simplify study management for every level.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(2)">
+                        <span class="faq-question-text">Do I need any technical skills to use it?</span>
+                        <span class="faq-arrow" id="faq-arrow-2">+</span>
+                    </div>
+                    <div class="faq-answer" id="faq-answer-2">
+                        <p>Not at all. Ediify Nexus is simple and beginner-friendly. It also comes with a step-by-step User Guide and a demo video to help you start instantly.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(3)">
+                        <span class="faq-question-text">How will I receive Ediify Nexus after purchase?</span>
+                        <span class="faq-arrow" id="faq-arrow-3">+</span>
+                    </div>
+                    <div class="faq-answer" id="faq-answer-3">
+                        <p>Once your purchase is complete, you'll receive instant access to download the Ediify Nexus Excel (.xlsv) file along with the User Guide (PDF).</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(4)">
+                        <span class="faq-question-text">Is Ediify Nexus a one-time purchase or subscription?</span>
+                        <span class="faq-arrow" id="faq-arrow-4">+</span>
+                    </div>
+                    <div class="faq-answer" id="faq-answer-4">
+                        <p>Ediify Nexus is a one-time purchase – no subscription required. Your purchase includes free updates until March 31, 2026. After that, you'll need to purchase the latest version to continue receiving future updates. Every new purchase gives you access to its own update cycle and a new private Telegram channel for support.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(5)">
+                        <span class="faq-question-text">What devices can I use Ediify Nexus on?</span>
+                        <span class="faq-arrow" id="faq-arrow-5">+</span>
+                    </div>
+                    <div class="faq-answer" id="faq-answer-5">
+                        <p>It works best on laptops and desktops, but can also be used on Android and iOS devices that support Microsoft Excel.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(6)">
+                        <span class="faq-question-text">Will I get future updates?</span>
+                        <span class="faq-arrow" id="faq-arrow-6">+</span>
+                    </div>
+                    <div class="faq-answer" id="faq-answer-6">
+                        <p>Yes. You'll receive all free updates released till March 31, 2026. Notifications and update links are shared via the private Telegram channel.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(7)">
+                        <span class="faq-question-text">What bonuses are included?</span>
+                        <span class="faq-arrow" id="faq-arrow-7">+</span>
+                    </div>
+                    <div class="faq-answer" id="faq-answer-7">
+                        <p><strong>Bonus 1 — Detailed User Guide:</strong> Comprehensive instructions, examples and tips for every tool.</p>
+                        <p><strong>Bonus 2 — Free Private Telegram Access:</strong> Verified buyers get access to the private Telegram channel for updates and announcements until March 31, 2026.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(8)">
+                        <span class="faq-question-text">How is Ediify Nexus different from normal planners or notes?</span>
+                        <span class="faq-arrow" id="faq-arrow-8">+</span>
+                    </div>
+                    <div class="faq-answer" id="faq-answer-8">
+                        <p>Unlike regular planners, Ediify Nexus automates calculations, time allocation, and progress tracking, saving you hours of manual effort and helping you stay more productive and efficient.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(9)">
+                        <span class="faq-question-text">How do I join the private Telegram community?</span>
+                        <span class="faq-arrow" id="faq-arrow-9">+</span>
+                    </div>
+                    <div class="faq-answer" id="faq-answer-9">
+                        <p>A QR code is provided in the User Guide PDF. Simply scan the code to join. We verify membership to ensure only purchasers join — please make sure your Telegram display name matches the name used for purchase (details in the Guide).</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(10)">
+                        <span class="faq-question-text">What if I need help or have a query?</span>
+                        <span class="faq-arrow" id="faq-arrow-10">+</span>
+                    </div>
+                    <div class="faq-answer" id="faq-answer-10">
+                        <p>You can contact us anytime at <a href="mailto:ediifynexus@gmail.com" style="color: #00d9ff; text-decoration: none;">ediifynexus@gmail.com</a>. We'll get back to you quickly with assistance.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(11)">
+                        <span class="faq-question-text">What am I allowed to do with the files? (License & Usage)</span>
+                        <span class="faq-arrow" id="faq-arrow-11">+</span>
+                    </div>
+                    <div class="faq-answer" id="faq-answer-11">
+                        <p>Ediify Nexus and its User Guide are for personal use only. Redistribution, resale, sharing, or commercial use is not permitted.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2>Ready to Unlock Your Full Potential?</h2>
+            <p>Stop guessing. Start planning with precision. Get your copy of Ediify Nexus and transform your study routine today.</p>
+            <a href="https://wa.me/919149118493?text=Hi%2C%20I%20would%20like%20to%20purchase%20Ediify%20Nexus" class="cta-button">
+                Start Using Ediify Nexus — Just <span class="price-text"><span class="strike-price">₹799</span> ₹499</span>
+            </a>
+        </div>
+
+        <div class="footer" id="contact">
+            <div class="contact-info">
+                For queries or support, contact us at: <a href="mailto:ediifynexus@gmail.com">ediifynexus@gmail.com</a>
+            </div>
+            
+            <div class="footer-credit">
+                <p>Powered by Ediify Concept</p>
+            </div>
+
+            <div class="social-links">
+                <h4>Follow Us</h4>
+                <div class="social-icons">
+                    <a href="https://instagram.com/ediify.nexus" class="social-icon" target="_blank">
+                        <svg width="40" height="40" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                    </a>
+                    <a href="https://youtube.com/@EdiifyConcept" class="social-icon" target="_blank">
+                        <svg width="40" height="40" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                    </a>
+                    <a href="https://linkedin.com/company/ediifyconcept" class="social-icon" target="_blank">
+                        <svg width="40" height="40" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentlyOpen = -1;
+
+function toggleAccordion(index) {
+    const content = document.getElementById(`content-${index}`);
+    const backdrop = document.getElementById('accordionBackdrop');
+    
+    if (currentlyOpen === index) {
+        content.classList.remove('active');
+        backdrop.classList.remove('active');
+        currentlyOpen = -1;
+    } else {
+        if (currentlyOpen !== -1) {
+            document.getElementById(`content-${currentlyOpen}`).classList.remove('active');
+        }
+        content.classList.add('active');
+        backdrop.classList.add('active');
+        currentlyOpen = index;
+    }
+}
+
+function closeAllAccordions() {
+    if (currentlyOpen !== -1) {
+        document.getElementById(`content-${currentlyOpen}`).classList.remove('active');
+        document.getElementById('accordionBackdrop').classList.remove('active');
+        currentlyOpen = -1;
+    }
+}
+
+        let currentlyOpenFAQ = -1;
+
+        function toggleFAQ(index) {
+            const answer = document.getElementById(`faq-answer-${index}`);
+            const arrow = document.getElementById(`faq-arrow-${index}`);
+            
+            if (currentlyOpenFAQ === index) {
+                answer.classList.remove('active');
+                arrow.classList.remove('active');
+                currentlyOpenFAQ = -1;
+            } else {
+                if (currentlyOpenFAQ !== -1) {
+                    document.getElementById(`faq-answer-${currentlyOpenFAQ}`).classList.remove('active');
+                    document.getElementById(`faq-arrow-${currentlyOpenFAQ}`).classList.remove('active');
+                }
+                
+                answer.classList.add('active');
+                arrow.classList.add('active');
+                currentlyOpenFAQ = index;
+            }
+        }
+
+        function toggleMenu() {
+            const navMenu = document.getElementById('navMenu');
+            const navToggle = document.querySelector('.nav-toggle');
+            navMenu.classList.toggle('active');
+            navToggle.classList.toggle('active');
+        }
+
+        function closeMenu() {
+            const navMenu = document.getElementById('navMenu');
+            const navToggle = document.querySelector('.nav-toggle');
+            navMenu.classList.remove('active');
+            navToggle.classList.remove('active');
+        }
+    </script>
+</body>
+</html>
