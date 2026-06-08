@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ediify Nexus - Your Personal Study Automation Hub</title>
 <meta name="description" content="Ediify Nexus is a smart study automation toolkit with Excel planners, trackers & calculators to help students plan, revise & manage exams efficiently.">
-<metdisplaya property="og:site_name" content="Ediify Nexus">
-<medivta name="application-name" content="Ediify Nexus">
+<meta property="og:site_name" content="Ediify Nexus">
+<meta name="application-name" content="Ediify Nexus">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -164,40 +164,6 @@
             width: 100%;
         }
 
-        @media (max-width: 768px) {
-            .nav-toggle {
-                display: flex;
-            }
-
-            .nav-menu {
-                position: fixed;
-                top: 60px;
-                right: -100%;
-                width: 70%;
-                max-width: 300px;
-                background: rgba(15, 20, 25, 0.98);
-                backdrop-filter: blur(10px);
-                flex-direction: column;
-                padding: 30px 20px;
-                gap: 20px;
-                align-items: flex-start;
-                transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                border-left: 2px solid #00d9ff;
-                box-shadow: -5px 0 20px rgba(0, 217, 255, 0.3);
-                height: calc(100vh - 60px);
-            }
-
-            .nav-menu.active {
-                right: 0;
-            }
-
-            .nav-link {
-                font-size: 16px;
-                width: 100%;
-                padding: 10px 0;
-            }
-        }
-
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -305,11 +271,6 @@
 
         .price-text {
             display: inline-block;
-        }
-
-        .strike-price {
-            text-decoration: line-through;
-            opacity: 0.6;
         }
 
         .section {
@@ -424,10 +385,6 @@
     line-height: 1.4;
 }
 
-.accordion-arrow {
-    display: none;
-}
-
 .accordion-content {
     display: none;
 }
@@ -498,16 +455,6 @@
 .accordion-backdrop.active {
     display: block;
 }
-
-@media (max-width: 768px) {
-    .toolkit-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .accordion-content.active {
-        width: 95%;
-    }
-      }
 
 .new-badge {
     display: inline-block;
@@ -608,12 +555,6 @@
     text-align: right;
 }
 
-@media (max-width: 768px) {
-    .testimonials-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
         .walkthrough-subsection {
     margin-top: 50px;
     margin-bottom: 50px;
@@ -709,17 +650,6 @@
     color: #a0a0a0;
     margin: 0;
     white-space: nowrap;
-}
-
-@media (max-width: 768px) {
-    .video-placeholder {
-        height: 300px;
-    }
-    
-    .coming-soon-text p {
-        font-size: 18px;
-        white-space: normal;
-    }
 }
 
         .bonus-section {
@@ -940,14 +870,39 @@
     line-height: 1.6;
 }
 
-@media (max-width: 768px) {
-    .copyright p {
-        max-width: 260px;
-        margin: 0 auto;
-    }
-}
-
         @media (max-width: 768px) {
+             .nav-toggle {
+                display: flex;
+            }
+
+              .nav-menu {
+ position: fixed;
+                top: 60px;
+                right: -100%;
+                width: 70%;
+                max-width: 300px;
+                background: rgba(15, 20, 25, 0.98);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                padding: 30px 20px;
+                gap: 20px;
+                align-items: flex-start;
+                transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                border-left: 2px solid #00d9ff;
+                box-shadow: -5px 0 20px rgba(0, 217, 255, 0.3);
+                height: calc(100vh - 60px);
+            }
+
+            .nav-menu.active {
+                right: 0;
+            }
+
+            .nav-link {
+                font-size: 16px;
+                width: 100%;
+                padding: 10px 0;
+            }
+
             .hero-title {
                 font-size: 32px;
             }
@@ -959,6 +914,33 @@
             .section-title {
                 font-size: 28px;
             }
+
+            .toolkit-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .accordion-content.active {
+        width: 95%;
+    }
+
+                  .testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+
+                 .video-placeholder {
+        height: 300px;
+    }
+    
+    .coming-soon-text p {
+        font-size: 18px;
+        white-space: normal;
+    }
+
+              .copyright p {
+        max-width: 260px;
+        margin: 0 auto;
+    }
+
         }
     </style>
 </head>
